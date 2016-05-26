@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    {% load staticfiles %}
+
+    <meta charset="utf-8" />
+    <title>菜價王</title>
+
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+
+    <!--     Fonts and icons     -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link href="http://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css">
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link href="{% static "css/materialize/materialize.css" %}" rel="stylesheet" />
+    <link href="{% static "css/myCss.css" %}" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="{% static "js/materialize/materialize.js" %}"></script>
+    <script src="{% static "js/echarts/dist/echarts.min.js" %}"></script>
+    <script src="{% static "js/myJS.js" %}"></script>
+</head>
+
+<body>
+
+    <!-- Navbar will come here -->
+
+
+    <!-- end navbar -->
+
+
+    <div class="header">
+
+    </div>
+    <!-- you can use the class main-raised if you want the main area to be as a page with shadows -->
+    <div class="main">
+        <div id="floater"></div>
+        <div id="mychart" class="container z-depth-2" style="margin:auto;background-color:#FFFFFF;">
+            <div class="row s12">
+                <div class="col s2" style="margin-top:8px;">
+                    <div class="input-field">
+                        <select>
+                            <optgroup label="蔬菜">
+                                <option value="0">高麗菜</option>
+                                <option value="1">花椰菜</option>
+                            </optgroup>
+                            <optgroup label="水果">
+                                <option value="2">番茄</option>
+                                <option value="3">香蕉</option>
+                            </optgroup>
+                        </select>
+                        <label>選擇農產品</label>
+                    </div>
+                </div>
+                <div class="x_panel col s10">
+                    <div class="x_content">
+                        <div id="echart_line" style="height:470px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div </body>
+
+
+</html>
