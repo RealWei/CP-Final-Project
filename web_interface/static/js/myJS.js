@@ -279,12 +279,14 @@ function getDates(startDate, stopDate) {
 function getData(){
     var product = $("#product_select option:selected").text();
     var location = $("#location_select option:selected").text();
+    console.log(product + ' ' + location);
     $.getJSON(serverUrl, {product: product, location: location},
         function(data, textStatus) {
+            console.log(data);
             chartData['name'] = data['product'];
             chartData['data'] = data['price'];
             var dates = getDates(new Date(data['starting_date']), new Date(data['ending_date']).addDays(7))
-            if(predictData['data'].length < dates.length + 7){
+            if(predictData['data'].length < dates.length){
                 var diff = dates.length - predictData['data'].length;
                 for(var i = 0; i < diff; i++){
                     predictData['data'].unshift(0);
@@ -360,6 +362,6 @@ $(document).ready(function() {
         series: []
     });
     $('select').material_select();
-    $('select').change(getData());
+    $('select').change(function(){getData();});
     getData();
 });
