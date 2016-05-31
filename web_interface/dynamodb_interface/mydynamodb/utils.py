@@ -121,10 +121,10 @@ def parse_product_prict_query_output(responseItem, product, region):
             price.append(float(data[key_trading_data][region_key][key_price]))
 
     return {
-        'product':product.decode('utf-8'),
-        'region':region.decode('utf-8'),
-        'starting_date':starting_date.decode('utf-8'),
-        'ending_date':ending_date.decode('utf-8'),
+        'product':product,
+        'region':region,
+        'starting_date':starting_date,
+        'ending_date':ending_date,
         'price':price,
     }
 
