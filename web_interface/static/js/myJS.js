@@ -217,109 +217,95 @@ var theme = {
         fontFamily: 'Arial, Verdana, sans-serif'
     }
 };
+//var serverUrl = 'http://140.114.75.138:8080/data/';
+var serverUrl = 'http://127.0.0.1:8080/data/';
+var names = ['九層塔', '大蒜', '小白菜', '玉米', '地瓜', '竹筍', '辣椒',
+                    '番茄', '花椰菜', '青江菜', '青蔥', '南瓜', '洋蔥', '甜椒',
+                    '菠菜', '馬鈴薯', '高麗菜', '香蕉', '蘿蔔', '芒果', '草莓',
+                    '葡萄', '西瓜', '鳳梨', '蘋果', '椪柑', '桃園', '宜蘭', '台中', '高雄', '台東'];
+var echartLine;
+var chartData = {
+    name: '',
+    type: 'line',
+    smooth: true,
+    itemStyle: {
+        normal: {
+            areaStyle: {
+                type: 'default'
+            }
+        }
+    },
+    data: [10, 12, 21, 54, 43, 87, 34, 67, 77,87,99,100,105,134,64]
+}
 
+var predictData = {
+    name: '預測',
+    type: 'line',
+    smooth: true,
+    itemStyle: {
+        normal: {
+            areaStyle: {
+                type: 'default'
+            }
+        }
+    },
+    data: [77,87,99,100,105,134,64]
+};
+
+Date.prototype.addDays = function(days) {
+    var dat = new Date(this.valueOf())
+    dat.setDate(dat.getDate() + days);
+    return dat;
+}
+
+function getDates(startDate, stopDate) {
+    var dateArray = new Array();
+    var currentDate = startDate;
+    while (currentDate <= stopDate) {
+        dateArray.push( new Date (currentDate) )
+        currentDate = currentDate.addDays(1);
+    }
+    dateArray = dateArray.map(function(date){
+        var month = date.getMonth() + 1; //months from 1-12
+        var day = date.getDate();
+        var year = date.getFullYear();
+
+        newdate = year + "/" + month + "/" + day;
+        return newdate;
+    });
+    return dateArray;
+}
+
+function getData(){
+    var product = $("#product_select option:selected").text();
+    var location = $("#location_select option:selected").text();
+    $.getJSON(serverUrl, {product: product, location: location},
+        function(data, textStatus) {
+            chartData['name'] = data['product'];
+            chartData['data'] = data['price'];
+            var dates = getDates(new Date(data['starting_date']), new Date(data['ending_date']).addDays(7))
+            if(predictData['data'].length < dates.length + 7){
+                var diff = dates.length - predictData['data'].length;
+                for(var i = 0; i < diff; i++){
+                    predictData['data'].unshift(0);
+                }
+            }
+            echartLine.setOption({
+                legend: {
+                    data: ['預測']
+                },
+                xAxis: [{
+                    type: 'category',
+                    boundaryGap: false,
+                    data: dates
+                }],
+                series:[chartData, predictData]
+            });
+    });
+}
 
 $(document).ready(function() {
-
-    var priceData = [{
-        name: '高麗菜',
-        type: 'line',
-        smooth: true,
-        itemStyle: {
-            normal: {
-                areaStyle: {
-                    type: 'default'
-                }
-            }
-        },
-        data: [10, 12, 21, 54, 43, 87, 34, 67, 77]
-    }, {
-        name: '花椰菜',
-        type: 'line',
-        smooth: true,
-        itemStyle: {
-            normal: {
-                areaStyle: {
-                    type: 'default'
-                }
-            }
-        },
-        data: [87, 50, 42, 17, 35, 79, 101]
-    }, {
-        name: '番茄',
-        type: 'line',
-        smooth: true,
-        itemStyle: {
-            normal: {
-                areaStyle: {
-                    type: 'default'
-                }
-            }
-        },
-        data: [30, 17, 102, 86, 153, 30, 10]
-    }, {
-        name: '香蕉',
-        type: 'line',
-        smooth: true,
-        itemStyle: {
-            normal: {
-                areaStyle: {
-                    type: 'default'
-                }
-            }
-        },
-        data: [7, 5, 42, 7, 35, 79, 151]
-    }];
-    var predictData = [{
-        name: '預測',
-        type: 'line',
-        smooth: true,
-        itemStyle: {
-            normal: {
-                areaStyle: {
-                    type: 'default'
-                }
-            }
-        },
-        data: [10, 12, 21, 54, 43, 87, 34, 67, 77,87,99,100,105,134,64]
-    }, {
-        name: '預測',
-        type: 'line',
-        smooth: true,
-        itemStyle: {
-            normal: {
-                areaStyle: {
-                    type: 'default'
-                }
-            }
-        },
-        data: [87, 50, 42, 17, 35, 79, 101,97,93,64,42,107]
-    }, {
-        name: '番茄',
-        type: 'line',
-        smooth: true,
-        itemStyle: {
-            normal: {
-                areaStyle: {
-                    type: 'default'
-                }
-            }
-        },
-        data: [30, 17, 102, 86, 153, 30, 10,15,23,45,78,60]
-    }, {
-        name: '香蕉',
-        type: 'line',
-        smooth: true,
-        itemStyle: {
-            normal: {
-                areaStyle: {
-                    type: 'default'
-                }
-            }
-        },
-        data: [7, 5, 42, 7, 35, 79, 151,203,15]
-    }];
-    var echartLine = echarts.init(document.getElementById('echart_line'), theme);
+    echartLine = echarts.init(document.getElementById('echart_line'), theme);
     echartLine.setOption({
         title: {
             text: '歷史價格'
@@ -335,7 +321,7 @@ $(document).ready(function() {
             feature: {
                 magicType: {
                     show: true,
-                    title: {
+                    ｉtitle: {
                         line: 'Line',
                         bar: 'Bar',
                         stack: 'Stack',
@@ -374,12 +360,6 @@ $(document).ready(function() {
         series: []
     });
     $('select').material_select();
-    $('select').change(function(){
-        var optionSelected = $("option:selected", this);
-        var valueSelected = this.value;
-        console.log(priceData[valueSelected].name);
-        echartLine.setOption({legend: {
-            data: ['預測']
-        }, series:[priceData[valueSelected], predictData[valueSelected]]});
-    });
+    $('select').change(getData());
+    getData();
 });
