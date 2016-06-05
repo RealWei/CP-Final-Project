@@ -290,8 +290,11 @@ function getData(){
             for(var i = 0; i < 7; i++){
                 predictData['data'].push(chartData['data'].pop());
             }
+            for(var i = 0; i < 7; i++){
+                chartData['data'].push(0);
+            }
             if(predictData['data'].length < dates.length){
-                var diff = dates.length - predictData['data'].length;
+                var diff = dates.length - predictData['data'].length - 7;
                 for(var i = 0; i < diff; i++){
                     predictData['data'].unshift(0);
                 }
