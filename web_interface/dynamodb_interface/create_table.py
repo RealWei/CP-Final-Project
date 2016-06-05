@@ -1,4 +1,4 @@
-from __future__ import print_function # Python 2/3 compatibility
+ # Python 2/3 compatibility
 from mydynamodb.setting import dynamodb_resource, dynamodb_client, WEATHER_TABLE, PRODOCT_PRICE_TABLE
 from mydynamodb.attribute_key import *
 import boto3

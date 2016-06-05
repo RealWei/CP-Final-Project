@@ -286,6 +286,10 @@ function getData(){
             chartData['name'] = data['product'];
             chartData['data'] = data['price'];
             var dates = getDates(new Date(data['starting_date']), new Date(data['ending_date']).addDays(7))
+            predictData['data'] = [];
+            for(var i = 0; i < 7; i++){
+                predictData['data'].push(chartData['data'].pop());
+            }
             if(predictData['data'].length < dates.length){
                 var diff = dates.length - predictData['data'].length;
                 for(var i = 0; i < diff; i++){
